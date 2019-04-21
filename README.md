@@ -16,3 +16,16 @@
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
   </a>
 </p>
+
+## Status
+
+- [x] Plugin created, [`bash-parser`](https://github.com/vorpaljs/bash-parser) integrated.
+- [x] Able to print very basic programs.
+- [x] Print control flow statements.
+- [x] Print test expressions, variable substitutions, arithmetic.
+- [x] Print file redirection, pipelines
+- [ ] Print heredocs, herestrings and process substitution.
+- [ ] Optimize overall formatting.
+- [ ] Print comments.
+- [ ] Full POSIX compliant formatting.
+- [ ] Full Bash v4 formatting.
