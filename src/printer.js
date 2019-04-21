@@ -5,6 +5,7 @@ const {
   join,
   group,
   indent,
+  dedent,
   ifBreak,
   hardline,
   softline,
@@ -144,6 +145,25 @@ function printNode(path, options, print) {
         group(indent(concat([hardline, path.call(print, 'do')]))),
         hardline,
         'done',
+        hardline,
+      ]);
+    }
+    case 'Case': {
+      return concat([
+        'case ',
+        path.call(print, 'clause'),
+        ' in',
+        indent(concat([hardline, concat(path.map(print, 'cases'))])),
+        hardline,
+        'esac',
+        hardline,
+      ]);
+    }
+    case 'CaseItem': {
+      return concat([
+        concat(path.map(print, 'pattern')),
+        ')',
+        indent(concat([hardline, path.call(print, 'body'), hardline, ';;'])),
         hardline,
       ]);
     }
