@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`herdoc.sh 1`] = `
+====================================options=====================================
+parsers: ["bash"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+#!/bin/bash
+
+cat <<EOF
+DOC
+EOF
+
+cat <<JSON
+{
+  "some": "\${PROPERTY}"
+}
+JSON
+
+# TODO: Parser bug
+# foo=$(cat <<END
+# start
+# end
+# END
+# )
+
+=====================================output=====================================
+cat <<EOF
+DOC
+EOF
+cat <<JSON
+some: "\${PROPERTY}"
+JSON
+================================================================================
+`;

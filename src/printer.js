@@ -5,18 +5,10 @@ const {
   join,
   group,
   indent,
-  dedent,
   ifBreak,
   hardline,
   softline,
 } = require('prettier').doc.builders;
-// const {
-//   isNextLineEmpty,
-//   isNextLineEmptyAfterIndex,
-//   getNextNonSpaceNonCommentCharacterIndex,
-//   hasNewline,
-//   hasNewlineInRange,
-// } = require('prettier').util;
 
 const lineContinuation = ifBreak(concat([' \\', softline]), ' ');
 
@@ -187,15 +179,29 @@ function printNode(path, options, print) {
     case 'CompoundList': {
       return join(hardline, path.map(print, 'commands'));
     }
-    case 'Name': {
+    case 'Name':
       return node.text;
-    }
     case 'io_number':
-    case 'dgreat':
-    case 'greatand':
-    case 'great': {
       return node.text;
+    case 'great':
+      return '>';
+    case 'less':
+      return '<';
+    case 'dgreat':
+      return '>>';
+    case 'dless': {
+      // TODO: Raise parser bug - herdocs are unhandled
+      let sentinal = '';
+      if (node.loc) {
+        const tail = options.originalText.substring(node.loc.end.char);
+        sentinal = tail.substring(1, tail.indexOf('\n'));
+      }
+      return concat(['<<', sentinal]);
     }
+    case 'greatand':
+      return '<&';
+    case 'lessand':
+      return '>&';
 
     default:
       // istanbul ignore next
