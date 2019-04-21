@@ -21,8 +21,6 @@ while $foo; do
 done
 
 =====================================output=====================================
-#!/bin/bash -eu
-
 while true; do
   echo yes
 done
@@ -55,8 +53,6 @@ while [ $x -eq $y ] ; do
 done
 
 =====================================output=====================================
-#!/bin/bash -eu
-
 while [ 1 ]; do
   echo yes
 done

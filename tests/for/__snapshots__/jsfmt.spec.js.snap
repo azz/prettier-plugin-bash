@@ -13,8 +13,6 @@ for f in $files; do
 done
 
 =====================================output=====================================
-#!/bin/bash -eu
-
 for f in $files; do
   echo "\${f}"
 done

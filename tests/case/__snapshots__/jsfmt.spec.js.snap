@@ -18,8 +18,6 @@ case x in
 esac
 
 =====================================output=====================================
-#!/bin/bash -eu
-
 case x in
   foo)
     echo foo

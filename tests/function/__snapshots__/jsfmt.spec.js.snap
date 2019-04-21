@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`redirects.sh 1`] = `
+exports[`function.sh 1`] = `
 ====================================options=====================================
 parsers: ["bash"]
 printWidth: 80
@@ -8,27 +8,31 @@ printWidth: 80
 =====================================input======================================
 #!/bin/bash
 
-echo '1' > file
+foo() {
+  echo 'foo'
+}
 
-echo '2' >> file
+bar() {
+  echo 'bar'
+}
 
-echo '3' 2> file
-
-echo '4' 2>&1
-
-echo '5' 1>&2
-
-echo '6' >&1
-
-echo '7' >&1 2> file
+baz() {
+  local x="$1"
+  echo "x = $x"
+  echo "args = $*"
+}
 
 =====================================output=====================================
-echo 1 >file
-echo 2 >>file
-echo 3 2>file
-echo 4 2>&1
-echo 5 1>&2
-echo 6 >&1
-echo 7 >&1 2>file
+foo() {
+  echo foo
+}
+bar() {
+  echo bar
+}
+baz() {
+  local x="$1"
+  echo "x = $x"
+  echo "args = $*"
+}
 ================================================================================
 `;

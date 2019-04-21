@@ -67,9 +67,6 @@ function printNode(path, options, print) {
       if (/\n/.test(node.text)) {
         return `'${node.text}'`;
       }
-      if (/ /.test(node.text)) {
-        return `"${node.text}"`;
-      }
       return node.text;
     }
     case 'NumericLiteral': {
@@ -176,6 +173,15 @@ function printNode(path, options, print) {
         ')',
         indent(concat([hardline, path.call(print, 'body'), hardline, ';;'])),
         hardline,
+      ]);
+    }
+    case 'Function': {
+      return concat([
+        path.call(print, 'name'),
+        '() {',
+        indent(concat([hardline, path.call(print, 'body')])),
+        hardline,
+        '}',
       ]);
     }
     case 'CompoundList': {
