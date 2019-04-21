@@ -8,6 +8,7 @@ const {
   indent,
   ifBreak,
   hardline,
+  softline,
 } = require('prettier').doc.builders;
 // const {
 //   isNextLineEmpty,
@@ -17,7 +18,7 @@ const {
 //   hasNewlineInRange,
 // } = require('prettier').util;
 
-const lineContinuation = ifBreak(concat([' \\', hardline]), line);
+const lineContinuation = ifBreak(concat([' \\', softline]), ' ');
 
 function printNode(path, options, print) {
   const node = path.getValue();
@@ -93,18 +94,52 @@ function printNode(path, options, print) {
         ),
       ]);
     }
+    case 'Pipeline': {
+      return indent(
+        join(concat([' |', lineContinuation]), path.map(print, 'commands')),
+      );
+    }
     case 'Redirect': {
       return concat([
-        path.call(print, 'numberIo'),
+        node.numberIo ? path.call(print, 'numberIo') : '',
         path.call(print, 'op'),
-        ' ',
         path.call(print, 'file'),
       ]);
     }
-    case 'great': {
+    case 'For': {
+      return concat([
+        'for ',
+        path.call(print, 'name'),
+        ' in ',
+        concat(path.map(print, 'wordlist')),
+        '; do',
+        group(indent(concat([hardline, path.call(print, 'do')]))),
+        hardline,
+        'done',
+        hardline,
+      ]);
+    }
+    case 'While': {
+      return concat([
+        'while ',
+        path.call(print, 'clause'),
+        '; do',
+        group(indent(concat([hardline, path.call(print, 'do')]))),
+        hardline,
+        'done',
+        hardline,
+      ]);
+    }
+    case 'CompoundList': {
+      return join(hardline, path.map(print, 'commands'));
+    }
+    case 'Name': {
       return node.text;
     }
-    case 'io_number': {
+    case 'io_number':
+    case 'dgreat':
+    case 'greatand':
+    case 'great': {
       return node.text;
     }
 

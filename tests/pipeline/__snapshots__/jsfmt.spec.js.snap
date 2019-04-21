@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pipeline.sh 1`] = `
+====================================options=====================================
+parsers: ["bash"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+echo "foo" | sed 's/foo/bar/'
+
+echo "foo foo foo foo foo foo foo foo foo foo foo foo foo foo" | sed 's/foo/bar/g'
+
+=====================================output=====================================
+#!/bin/bash -eu
+
+echo foo | \\
+  sed s/foo/bar/
+echo "foo foo foo foo foo foo foo foo foo foo foo foo foo foo" | \\
+  sed s/foo/bar/g
+================================================================================
+`;

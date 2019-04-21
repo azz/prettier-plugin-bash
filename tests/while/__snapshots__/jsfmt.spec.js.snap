@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic_while.sh 1`] = `
+====================================options=====================================
+parsers: ["bash"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+#!/bin/bash
+
+while true; do 
+  echo 'yes'
+done
+
+while :; do
+  echo 'yes'
+done
+
+while $foo; do 
+  echo 'yes'
+done
+
+=====================================output=====================================
+#!/bin/bash -eu
+
+while true; do
+  echo yes
+done
+
+while :; do
+  echo yes
+done
+
+while $foo; do
+  echo yes
+done
+
+================================================================================
+`;
+
+exports[`test_while.sh 1`] = `
+====================================options=====================================
+parsers: ["bash"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+#!/bin/bash
+
+while [ 1 ]; do 
+  echo 'yes'
+done
+
+while [ $x -eq $y ] ; do
+  echo 'yes'
+done
+
+=====================================output=====================================
+#!/bin/bash -eu
+
+while [ 1 ]; do
+  echo yes
+done
+
+while [ $x -eq $y ]; do
+  echo yes
+done
+
+================================================================================
+`;
