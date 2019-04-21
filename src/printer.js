@@ -179,6 +179,14 @@ function printNode(path, options, print) {
     case 'CompoundList': {
       return join(hardline, path.map(print, 'commands'));
     }
+    case 'Subshell': {
+      return concat([
+        '(',
+        indent(concat([hardline, path.call(print, 'list')])),
+        hardline,
+        ')',
+      ]);
+    }
     case 'Name':
       return node.text;
     case 'io_number':
