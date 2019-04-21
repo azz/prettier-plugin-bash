@@ -8,9 +8,7 @@ const {
   indent,
   ifBreak,
   hardline,
-  softline,
 } = require('prettier').doc.builders;
-const { willBreak } = require('prettier').doc.utils;
 // const {
 //   isNextLineEmpty,
 //   isNextLineEmptyAfterIndex,
@@ -18,13 +16,8 @@ const { willBreak } = require('prettier').doc.utils;
 //   hasNewline,
 //   hasNewlineInRange,
 // } = require('prettier').util;
-const comments = require('./comments');
 
-function genericPrint(path, options, print) {
-  const node = path.getValue();
-
-  return printNode(path, options, print);
-}
+const lineContinuation = ifBreak(concat([' \\', hardline]), line);
 
 function printNode(path, options, print) {
   const node = path.getValue();
@@ -32,30 +25,105 @@ function printNode(path, options, print) {
   switch (node.type) {
     case 'Script': {
       return concat([
-        '#!/bin/bash -eu',
+        '#!/bin/bash -eu', // TODO: use original shebang
         hardline,
         hardline,
-        concat(path.map(print, 'commands')),
+        join(hardline, path.map(print, 'commands')),
       ]);
     }
     case 'Command': {
-      // console.log(node);
-      return concat([
-        path.call(print, 'name'),
-        ' ',
-        join(' ', path.map(print, 'suffix')),
-      ]);
+      const parts = [];
+
+      if (node.prefix) {
+        parts.push(join(lineContinuation, path.map(print, 'prefix')));
+      }
+
+      if (node.name) {
+        parts.push(path.call(print, 'name'));
+      }
+
+      if (node.suffix) {
+        parts.push(
+          indent(
+            concat([
+              lineContinuation,
+              join(lineContinuation, path.map(print, 'suffix')),
+            ]),
+          ),
+        );
+      }
+
+      // parts.push(hardline);
+
+      return group(concat(parts));
     }
     case 'Word': {
+      if (/\n/.test(node.text)) {
+        return `'${node.text}'`;
+      }
       if (/ /.test(node.text)) {
         return `"${node.text}"`;
       }
       return node.text;
     }
+    case 'AssignmentWord': {
+      return concat([
+        node.text.substring(0, node.text.indexOf('=')),
+        '=',
+        concat(path.map(print, 'expansion')),
+      ]);
+    }
+    case 'ParameterExpansion': {
+      return concat(['${', String(node.parameter), '}']);
+    }
+    case 'LogicalExpression': {
+      return concat([
+        group(path.call(print, 'left')),
+        indent(
+          concat([
+            lineContinuation,
+            group(
+              concat([
+                printOperator(node.op),
+                lineContinuation,
+                path.call(print, 'right'),
+              ]),
+            ),
+          ]),
+        ),
+      ]);
+    }
+    case 'Redirect': {
+      return concat([
+        path.call(print, 'numberIo'),
+        path.call(print, 'op'),
+        ' ',
+        path.call(print, 'file'),
+      ]);
+    }
+    case 'great': {
+      return node.text;
+    }
+    case 'io_number': {
+      return node.text;
+    }
+
     default:
       // istanbul ignore next
+      console.error(node); // eslint-disable-line no-console
       throw new Error(`Have not implemented type "${node.type}".`);
   }
 }
 
-module.exports = genericPrint;
+function printOperator(op) {
+  switch (op) {
+    case 'or':
+      return '||';
+    case 'and':
+      return '&&';
+    default:
+      throw new Error(`Unknown operator: ${op}`);
+  }
+}
+
+module.exports = printNode;

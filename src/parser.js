@@ -13,6 +13,7 @@ function parse(text, parsers, opts) {
     ast = parseBash(text, {
       insertLOC: true,
     });
+    require('fs').writeFileSync('ast.json', JSON.stringify(ast, null, 2));
   } catch (err) {
     // err.loc = {
     //   start: {
