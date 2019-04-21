@@ -106,6 +106,24 @@ function printNode(path, options, print) {
         path.call(print, 'file'),
       ]);
     }
+    case 'If': {
+      return concat([
+        'if ',
+        path.call(print, 'clause'),
+        '; then',
+        group(indent(concat([hardline, path.call(print, 'then')]))),
+        node.else
+          ? concat([
+              hardline,
+              'else',
+              indent(concat([hardline, path.call(print, 'else')])),
+              hardline,
+            ])
+          : '',
+        'fi',
+        hardline,
+      ]);
+    }
     case 'For': {
       return concat([
         'for ',
