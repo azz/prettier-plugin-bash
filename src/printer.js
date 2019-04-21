@@ -64,6 +64,9 @@ function printNode(path, options, print) {
       }
       return node.text;
     }
+    case 'Identifier': {
+      return node.name;
+    }
     case 'NumericLiteral': {
       return node.extra.raw;
     }
@@ -91,6 +94,15 @@ function printNode(path, options, print) {
               ]),
             ]),
           ),
+        ]),
+      );
+    }
+    case 'BinaryExpression': {
+      return group(
+        concat([
+          path.call(print, 'left'),
+          node.operator,
+          path.call(print, 'right'),
         ]),
       );
     }
