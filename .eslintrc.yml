@@ -5,6 +5,9 @@ extends:
   - plugin:jest/recommended
 plugins:
   - import
+parser: babel-eslint
+parserOptions:
+  sourceType: script
 root: true
 env:
   es6: true
@@ -28,19 +31,11 @@ rules:
   prefer-const: error
   prefer-destructuring: error
   prefer-template: error
-  react/no-deprecated: off
   strict: error
   symbol-description: error
-  yoda:
-    - error
-    - never
-    - exceptRange: true
 overrides:
   - files: "tests/**/*.js"
     rules:
-      strict: off
+      strict: 0
     globals:
       run_spec: true
-  - files: "build/*.js"
-    parserOptions:
-      sourceType: module

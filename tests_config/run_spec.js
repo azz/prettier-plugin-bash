@@ -71,7 +71,7 @@ global.run_spec = (dirname, parsers, options) => {
 
     test(basename, () => {
       expect(visualizedOutput).toEqual(
-        visualizeEndOfLine(consistentEndOfLine(output))
+        visualizeEndOfLine(consistentEndOfLine(output)),
       );
       expect(
         raw(
@@ -80,13 +80,13 @@ global.run_spec = (dirname, parsers, options) => {
               ? visualizeEndOfLine(
                   text
                     .replace(RANGE_START_PLACEHOLDER, '')
-                    .replace(RANGE_END_PLACEHOLDER, '')
+                    .replace(RANGE_END_PLACEHOLDER, ''),
                 )
               : source,
             hasEndOfLine ? visualizedOutput : output,
-            Object.assign({}, baseOptions, { parsers })
-          )
-        )
+            Object.assign({}, baseOptions, { parsers }),
+          ),
+        ),
       ).toMatchSnapshot();
     });
 
@@ -110,7 +110,7 @@ global.run_spec = (dirname, parsers, options) => {
         expect(() => {
           formattedAst = parse(
             output.replace(CURSOR_PLACEHOLDER, ''),
-            parseOptions
+            parseOptions,
           );
         }).not.toThrow();
         expect(originalAst).toEqual(formattedAst);
@@ -126,7 +126,7 @@ function parse(source, options) {
 function format(source, filename, options) {
   const result = prettier.formatWithCursor(
     source,
-    Object.assign({ filepath: filename }, options)
+    Object.assign({ filepath: filename }, options),
   );
 
   return options.cursorOffset >= 0
@@ -173,15 +173,15 @@ function createSnapshot(input, output, options) {
       printOptions(
         omit(
           options,
-          k => k === 'rangeStart' || k === 'rangeEnd' || k === 'cursorOffset'
-        )
+          k => k === 'rangeStart' || k === 'rangeEnd' || k === 'cursorOffset',
+        ),
       ),
       printWidthIndicator,
       printSeparator(separatorWidth, 'input'),
       input,
       printSeparator(separatorWidth, 'output'),
       output,
-      printSeparator(separatorWidth)
+      printSeparator(separatorWidth),
     )
     .join('\n');
 }

@@ -4,8 +4,6 @@ const parse = require('./parser');
 const print = require('./printer');
 const clean = require('./clean');
 const options = require('./options');
-const comments = require('./comments');
-const { hasPragma, insertPragma } = require('./pragma');
 
 // TODO: remove after resolve https://github.com/prettier/prettier/pull/5854
 function createLanguage(linguistData, { extend, override }) {
