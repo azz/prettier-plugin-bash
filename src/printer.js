@@ -20,17 +20,16 @@ const {
 
 const lineContinuation = ifBreak(concat([' \\', softline]), ' ');
 
+// '#!/bin/bash -eu', // TODO: use original shebang
+// hardline,
+// hardline,
+
 function printNode(path, options, print) {
   const node = path.getValue();
 
   switch (node.type) {
     case 'Script': {
-      return concat([
-        '#!/bin/bash -eu', // TODO: use original shebang
-        hardline,
-        hardline,
-        join(hardline, path.map(print, 'commands')),
-      ]);
+      return concat([join(hardline, path.map(print, 'commands'))]);
     }
     case 'Command': {
       const parts = [];
@@ -58,6 +57,12 @@ function printNode(path, options, print) {
 
       return group(concat(parts));
     }
+    case 'CommandExpansion': {
+      return concat(['$(', path.call(print, 'commandAST'), ')']);
+    }
+    case 'ArithmeticExpansion': {
+      return concat(['$((', path.call(print, 'arithmeticAST'), '))']);
+    }
     case 'Word': {
       if (/\n/.test(node.text)) {
         return `'${node.text}'`;
@@ -67,11 +72,17 @@ function printNode(path, options, print) {
       }
       return node.text;
     }
+    case 'NumericLiteral': {
+      return node.extra.raw;
+    }
     case 'AssignmentWord': {
+      const expansions = node.expansion && path.map(print, 'expansion');
       return concat([
         node.text.substring(0, node.text.indexOf('=')),
         '=',
-        concat(path.map(print, 'expansion')),
+        node.expansion
+          ? expansions[expansions.length - 1] // TODO: Raise parser bug
+          : node.text.substring(node.text.indexOf('=') + 1),
       ]);
     }
     case 'ParameterExpansion': {
