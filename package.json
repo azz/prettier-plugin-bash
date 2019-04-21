@@ -36,7 +36,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest",
-    "prettier": "prettier --plugin=. --parser=bash"
+    "prettier": "prettier --plugin=. --parser=bash",
+    "ast": "node -p 'JSON.stringify(require(\"bash-parser\")(fs.readFileSync(process.argv[1], \"utf8\")),0,2)'"
   },
   "prettier": "@azz/prettier-config",
   "jest": {

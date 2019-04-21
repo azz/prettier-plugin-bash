@@ -63,6 +63,9 @@ function printNode(path, options, print) {
     case 'ArithmeticExpansion': {
       return concat(['$((', path.call(print, 'arithmeticAST'), '))']);
     }
+    case 'ParameterExpansion': {
+      return concat(['${', String(node.parameter), '}']);
+    }
     case 'Word': {
       if (/\n/.test(node.text)) {
         return `'${node.text}'`;
@@ -82,25 +85,22 @@ function printNode(path, options, print) {
           : node.text.substring(node.text.indexOf('=') + 1),
       ]);
     }
-    case 'ParameterExpansion': {
-      return concat(['${', String(node.parameter), '}']);
-    }
     case 'LogicalExpression': {
-      return concat([
-        group(path.call(print, 'left')),
-        indent(
-          concat([
-            lineContinuation,
-            group(
+      return group(
+        concat([
+          group(path.call(print, 'left')),
+          indent(
+            concat([
+              lineContinuation,
               concat([
                 printOperator(node.op),
                 lineContinuation,
-                path.call(print, 'right'),
+                group(path.call(print, 'right')),
               ]),
-            ),
-          ]),
-        ),
-      ]);
+            ]),
+          ),
+        ]),
+      );
     }
     case 'Pipeline': {
       return indent(
