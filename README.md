@@ -19,13 +19,4 @@
 
 ## Status
 
-- [x] Plugin created, [`bash-parser`](https://github.com/vorpaljs/bash-parser) integrated.
-- [x] Able to print very basic programs.
-- [x] Print control flow statements.
-- [x] Print test expressions, variable substitutions, arithmetic.
-- [x] Print file redirection, pipelines
-- [ ] Print heredocs, herestrings and process substitution.
-- [ ] Optimize overall formatting.
-- [ ] Print comments.
-- [ ] Full POSIX compliant formatting.
-- [ ] Full Bash v4 formatting.
+See status of this project here: https://github.com/azz/prettier-plugin-bash/projects/1
